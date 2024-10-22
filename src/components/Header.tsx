@@ -1,12 +1,15 @@
-import { Button, Navbar, TextInput } from "flowbite-react";
+import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { currentUser } = useSelector((state: any) => state.user);
+  console.log("currentUser1", currentUser);
   return (
     <Navbar className='border-b-2'>
       <Link
@@ -38,11 +41,35 @@ export default function Header() {
         <Button className='w-12 h-10 hidden sm:inline ' color='gray'>
           <FaMoon />
         </Button>
-        <Link to='sign-in'>
-          <Button className='bg-gradient-to-r from-purple-500 to-blue-500 outline-none'>
-            Sign In
-          </Button>
-        </Link>
+        {currentUser ? (
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={
+              <Avatar alt='user' img={currentUser.data.photoURL} rounded />
+            }
+          >
+            <Dropdown.Header>
+              <span className='block text-sm'>
+                @{currentUser.data.userName}
+              </span>
+              <span className='block text-sm font-medium truncate'>
+                {currentUser.data.email}
+              </span>
+            </Dropdown.Header>
+            <Link to={"/dashboard?tab=profile"}>
+              <Dropdown.Item>Profile</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
+            <Dropdown.Item>Sign out</Dropdown.Item>
+          </Dropdown>
+        ) : (
+          <Link to='sign-in'>
+            <Button className='bg-gradient-to-r from-purple-500 to-blue-500 outline-none'>
+              Sign In
+            </Button>
+          </Link>
+        )}
       </div>
       <Navbar.Toggle className='lg:hidden' />
       <Navbar.Collapse className='lg:flex lg:flex-row lg:space-x-6 space-y-40 lg:space-y-3'>
