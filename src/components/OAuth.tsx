@@ -43,7 +43,7 @@ export default function OAuth() {
       outline
       onClick={handelGoogleClick}
     >
-      <AiFillGoogleCircle className='w-6 h-6 mr-2' />
+      <AiFillGoogleCircle className='w-6 h-6 mr-2 text-gray-700 dark:text-gray-200' />
       Continue with Google
     </Button>
   );
