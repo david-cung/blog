@@ -12,7 +12,6 @@ import OAuth from "../components/OAuth";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({
-    userName: "",
     password: "",
     email: "",
   });
@@ -43,11 +42,13 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+
       if (data.success === false) {
         dispatch(signInFailure(data.message));
       }
 
       if (res.ok) {
+        localStorage.setItem("token", data.data.accessToken);
         dispatch(signInSuccess(data));
         navigate("/", { replace: true });
       }
